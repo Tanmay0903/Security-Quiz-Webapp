@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Quiz WebApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0; /* Light gray background */
+        }
+        .quiz-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .answer-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #FFD700; /* Light yellow */
+            color: black; /* Adjust text color for visibility */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .answer-btn:hover {
+            background-color: #FFC400; /* Darker shade of yellow on hover */
+        }
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .message {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .reattempt-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #FFC400;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .reattempt-btn:hover {
+            background-color: #FFC400;
+        }
+        .badge {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFC400; /* Green color for badge */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quiz-container">
+        <div class="question" id="question"></div>
+        <button class="answer-btn" id="answer1"></button>
+        <button class="answer-btn" id="answer2"></button>
+        <button class="answer-btn" id="answer3"></button>
+        <button class="answer-btn" id="answer4"></button>
+        <div class="score" id="score" style="display: none;"></div>
+        <div class="message" id="message" style="display: none;"></div>
+        <button class="reattempt-btn" id="reattempt" style="display: none;" onclick="restartQuiz()">Reattempt Quiz</button>
+        <div class="badge" id="badge" style="display: none;">Congratulations! You've earned the Cyberwarrior badge!</div>
+    </div>
+    <script>
+        const questions = [
+            {
+                question: "What does HTML stand for?",
+                answers: [
+                    { text: "Hyper Text Markup Language", isCorrect: true },
+                    { text: "Hyperlinks and Text Markup Language", isCorrect: false },
+                    { text: "Home Tool Markup Language", isCorrect: false },
+                    { text: "Hyper Tool Markup Language", isCorrect: false }
+                ]
+            },
+            {
+                question: "What does CSS stand for?",
+                answers: [
+                    { text: "Computer Style Sheets", isCorrect: false },
+                    { text: "Creative Style Sheets", isCorrect: false },
+                    { text: "Cascading Style Sheets", isCorrect: true },
+                    { text: "Colorful Style Sheets", isCorrect: false }
+                ]
+            },
+            {
+                question: "What is a common sign of a phishing attempt?",
+                answers: [
+                    { text: "Unexpected emails asking for personal information", isCorrect: true },
+                    { text: "Emails from known contacts", isCorrect: false },
+                    { text: "Newsletters from subscribed websites", isCorrect: false },
+                    { text: "Event invitations from colleagues", isCorrect: false }
+                ]
+            },
+            {
+                question: "What does VPN stand for?",
+                answers: [
+                    { text: "Virtual Private Network", isCorrect: true },
+                    { text: "Virtual Personal Network", isCorrect: false },
+                    { text: "Virtual Protected Network", isCorrect: false },
+                    { text: "Virtual Public Network", isCorrect: false }
+                ]
+            },
+            {
+                question: "Which of the following is a strong password?",
+                answers: [
+                    { text: "Password123", isCorrect: false },
+                    { text: "123456", isCorrect: false },
+                    { text: "qwerty", isCorrect: false },
+                    { text: "A$1b@2c#3", isCorrect: true }
+                ]
+            },
+            {
+                question: "What should you do if you receive a suspicious email?",
+                answers: [
+                    { text: "Ignore it", isCorrect: false },
+                    { text: "Forward it to your friends", isCorrect: false },
+                    { text: "Click on any links to see if they're safe", isCorrect: false },
+                    { text: "Report it to your IT department", isCorrect: true }
+                ]
+            },
+            {
+                question: "What is two-factor authentication?",
+                answers: [
+                    { text: "Using two passwords for login", isCorrect: false },
+                    { text: "Using a password and a second form of verification", isCorrect: true },
+                    { text: "Using a strong password", isCorrect: false },
+                    { text: "Using a biometric login", isCorrect: false }
+                ]
+            },
+            {
+                question: "What is a firewall?",
+                answers: [
+                    { text: "A network security system that monitors and controls incoming and outgoing network traffic", isCorrect: true },
+                    { text: "A software that detects and removes viruses", isCorrect: false },
+                    { text: "A hardware device that blocks unauthorized access", isCorrect: false },
+                    { text: "A program that encrypts data", isCorrect: false }
+                ]
+            },
+            {
+                question: "Which of the following is a good practice for online security?",
+                answers: [
+                    { text: "Using the same password for multiple accounts", isCorrect: false },
+                    { text: "Sharing your passwords with friends", isCorrect: false },
+                    { text: "Updating your software regularly", isCorrect: true },
+                    { text: "Ignoring security warnings", isCorrect: false }
+                ]
+            },
+            {
+                question: "What is social engineering?",
+                answers: [
+                    { text: "Using social media to engineer projects", isCorrect: false },
+                    { text: "Manipulating people into divulging confidential information", isCorrect: true },
+                    { text: "Engineering software for social networks", isCorrect: false },
+                    { text: "Creating social media campaigns", isCorrect: false }
+                ]
+            }
+        ];
+
+        // Shuffle questions array
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Function to shuffle answers for a question
+        function shuffleAnswers(question) {
+            for (let i = question.answers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [question.answers[i], question.answers[j]] = [question.answers[j], question.answers[i]];
+            }
+        }
+
+        shuffle(questions);
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionElement = document.getElementById('question');
+        const answerButtons = [
+            document.getElementById('answer1'),
+            document.getElementById('answer2'),
+            document.getElementById('answer3'),
+            document.getElementById('answer4')
+        ];
+        const scoreElement = document.getElementById('score');
+        const messageElement = document.getElementById('message');
+        const reattemptButton = document.getElementById('reattempt');
+        const badgeElement = document.getElementById('badge');
+
+        function showQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionElement.innerText = currentQuestion.question;
+            shuffleAnswers(currentQuestion); // Shuffle answers for each question
+            currentQuestion.answers.forEach((answer, index) => {
+                answerButtons[index].innerText = answer.text;
+                answerButtons[index].onclick = () => handleAnswer(answer.isCorrect);
+            });
+        }
+
+        function handleAnswer(isCorrect) {
+            if (isCorrect) {
+                score++;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showScore();
+            }
+        }
+
+        function showScore() {
+            questionElement.style.display = 'none';
+            answerButtons.forEach(button => button.style.display = 'none');
+            scoreElement.style.display = 'block';
+            scoreElement.innerText = `Your score: ${score}/${questions.length}`;
+            if (score === questions.length) {
+                showBadge();
+            } else if (score >= 7) {
+                messageElement.style.display = 'block';
+                messageElement.innerText = 'Congratulations! You passed the quiz.';
+                reattemptButton.style.display = 'none';
+            } else {
+                reattemptButton.style.display = 'block';
+                messageElement.style.display = 'block';
+                messageElement.innerText = 'You did not answer all questions correctly. Please reattempt the quiz.';
+            }
+        }
+
+        function showBadge() {
+            messageElement.style.display = 'none';
+            reattemptButton.style.display = 'none';
+            badgeElement.style.display = 'block';
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            shuffle(questions); // Reshuffle questions for reattempt
+            questionElement.style.display = 'block';
+            answerButtons.forEach(button => button.style.display = 'block');
+            scoreElement.style.display = 'none';
+            messageElement.style.display = 'none';
+            reattemptButton.style.display = 'none';
+            badgeElement.style.display = 'none';
+            showQuestion();
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
