@@ -13,13 +13,14 @@ A simple web application for a security quiz, featuring questions on various sec
 
 ## Project Structure
 
-**Usage
+Usage
     The quiz will start immediately upon opening the main.html file.
     Click on the answer buttons to select your answer.
     Your score will be displayed at the end of the quiz.
     If you score a perfect 10/10, you will earn the "Cyberwarrior" badge.
     If you score less than 7, you will be prompted to reattempt the quiz.
-**
+
+
 **License**
 
 **This project is licensed under the MIT License - see the LICENSE file for details.
